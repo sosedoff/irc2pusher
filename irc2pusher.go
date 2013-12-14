@@ -74,9 +74,11 @@ func (irc *IrcClient) Connect() {
 
 func (irc *IrcClient) Send(str string) {
   data := []byte(str)
+
+  log.Printf(str)
+
   _, err := irc.Socket.Write(data)
   if err != nil {
-    log.Printf("Error sending: %s", data)
     log.Printf("Error: %v", err)
   }
 }
