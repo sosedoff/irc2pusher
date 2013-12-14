@@ -4,15 +4,21 @@ Send IRC messages to a Pusher channel
 
 ## Usage
 
-```bash
+Set pusher application settings:
+
+```
 export PUSHER_ID=12345
 export PUSHER_KEY=key
 export PUSHER_SECRET=secret
+```
 
+Run daemon:
+
+```
 irc2pusher -h irc.freenode.org -p 6667 -n bot -c #linux
 ```
 
-irc2pusher will send JSON messages in the following format:
+Messages will be sent in JSON format:
 
 ```json
 {
