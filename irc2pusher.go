@@ -100,7 +100,7 @@ func (irc *IrcClient) sendToPusher(message *IrcMessage) {
 }
 
 func (irc *IrcClient) handleLine(line string) {
-  fmt.Println(line)
+  log.Printf(line)
 
   if strings.Contains(line, "PING") {
     irc.respondToPing(line)
