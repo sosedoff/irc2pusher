@@ -21,3 +21,19 @@ irc2pusher will send JSON messages in the following format:
   "message": "hello there"
 }
 ```
+
+## Compile
+
+Clone repository and install dependencies:
+
+```
+git clone https://github.com/sosedoff/irc2pusher.git
+cd irc2pusher
+go get
+```
+
+Build:
+
+```
+go build
+```
