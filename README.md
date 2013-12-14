@@ -37,3 +37,9 @@ Build:
 ```
 go build
 ```
+
+## License
+
+The MIT License (MIT)
+
+Copyright (c) 2013 Dan Sosedoff, <dan.sosedoff@gmail.com>
