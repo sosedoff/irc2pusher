@@ -142,22 +142,22 @@ func (irc *IrcClient) InitClient() {
 }
 
 func (irc *IrcClient) InitPusher() {
-  id     := os.Getenv("PUSHER_APP_ID")
-  key    := os.Getenv("PUSHER_APP_KEY")
-  secret := os.Getenv("PUSHER_APP_SECRET")
+  id     := os.Getenv("PUSHER_ID")
+  key    := os.Getenv("PUSHER_KEY")
+  secret := os.Getenv("PUSHER_SECRET")
 
   if len(id) == 0 {
-    fmt.Println("PUSHER_APP_ID env variable is not set")
+    fmt.Println("PUSHER_ID env variable is not set")
     os.Exit(1)
   }
 
   if len(key) == 0 {
-    fmt.Println("PUSHER_APP_KEY env variable is not set")
+    fmt.Println("PUSHER_KEY env variable is not set")
     os.Exit(1)
   }
 
   if len(secret) == 0 {
-    fmt.Println("PUSHER_APP_SECRET env variable is not set")
+    fmt.Println("PUSHER_SECRET env variable is not set")
     os.Exit(1)
   }
 
