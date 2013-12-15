@@ -29,14 +29,28 @@ Messages will be sent in JSON format:
 }
 ```
 
-Extra options:
+### Pusher environment variables
 
-```bash
-# Set a different pusher channel, defaults to "irc"
-export PUSHER_CHANNEL=mychannel
+- `PUSHER_ID` - Application ID (required)
+- `PUSHER_KEY` - Application access key (required)
+- `PUSHER_SECRET` - Application secret key (required)
+- `PUSHER_CHANNEL` - Channel to send events to (optional, default: "irc")
+- `PUSHER_EVENT` - Message event name (optional, default: "message")
 
-# Set a different pusher event name, defaults to "message"
-export PUSHER_EVENT=myevent
+### Options
+
+```
+Usage:
+  irc2pusher [OPTIONS]
+
+Application Options:
+  -s, --server=   IRC server hostname or IP
+  -p, --port=     IRC server port
+  -n, --nick=     Nickname
+  -c, --channels= Channels to join
+
+Help Options:
+  -h, --help      Show this help message
 ```
 
 ## Compile
@@ -49,7 +63,7 @@ cd irc2pusher
 go get
 ```
 
-Build:
+Make sure you have Go >= 1.1 installed. Build:
 
 ```bash
 go build
