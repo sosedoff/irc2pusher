@@ -29,6 +29,16 @@ Messages will be sent in JSON format:
 }
 ```
 
+Extra options:
+
+```
+# Set a different pusher channel, defaults to "irc"
+export PUSHER_CHANNEL=mychannel
+
+# Set a different pusher event name, defaults to "message"
+export PUSHER_EVENT=myevent
+```
+
 ## Compile
 
 Clone repository and install dependencies:
