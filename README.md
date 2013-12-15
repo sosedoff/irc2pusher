@@ -43,7 +43,7 @@ export PUSHER_EVENT=myevent
 
 Clone repository and install dependencies:
 
-```
+```bash
 git clone https://github.com/sosedoff/irc2pusher.git
 cd irc2pusher
 go get
@@ -51,7 +51,7 @@ go get
 
 Build:
 
-```
+```bash
 go build
 ```
 
