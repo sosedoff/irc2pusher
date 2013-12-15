@@ -11,16 +11,21 @@ import (
   "strings"
   "encoding/json"
   "github.com/timonv/pusher"
+  "github.com/jessevdk/go-flags"
 )
 
 type IrcClient struct {
-  Server     string
-  Port       string
-  Nick       string
-  Channels   string
   Socket     net.Conn
+  Opts       *IrcOptions
   Pusher     *pusher.Client
   PusherOpts *PusherOptions
+}
+
+type IrcOptions struct {
+  Server   string `short:"s" long:"server" description:"IRC server hostname or IP"`
+  Port     string `short:"p" long:"port" description:"IRC server port"`
+  Nick     string `short:"n" long:"nick" description:"Nickname"`
+  Channels string `short:"c" long:"channels" description:"Channels to join"`
 }
 
 type IrcMessage struct {
@@ -61,7 +66,7 @@ func handleSignals(irc *IrcClient) {
 }
 
 func (irc *IrcClient) Connect() {
-  target := fmt.Sprintf("%s:%s", irc.Server, irc.Port)
+  target := fmt.Sprintf("%s:%s", irc.Opts.Server, irc.Opts.Port)
 
   socket, err := net.Dial("tcp", target)
   if err != nil {
@@ -71,10 +76,10 @@ func (irc *IrcClient) Connect() {
   log.Printf("Successfully connected to %s\n", target)
 
   irc.Socket = socket
-  irc.Send("USER " + irc.Nick + " 8 * :" + irc.Nick + "\n")
-  irc.Send("NICK " + irc.Nick + "\n")
+  irc.Send("USER " + irc.Opts.Nick + " 8 * :" + irc.Opts.Nick + "\n")
+  irc.Send("NICK " + irc.Opts.Nick + "\n")
 
-  channels := strings.Split(irc.Channels, " ")
+  channels := strings.Split(irc.Opts.Channels, " ")
   for _, name := range(channels) {
     irc.Send("JOIN " + name + "\n")
   }
@@ -146,11 +151,40 @@ func (irc *IrcClient) Run() {
   }
 }
 
+func getIrcOptions() *IrcOptions {
+  opts := new(IrcOptions)
+  _, err := flags.ParseArgs(opts, os.Args)
+
+  if err != nil {
+    fmt.Println(err)
+    os.Exit(1)
+  }
+
+  if len(opts.Port) == 0 {
+    opts.Port = "6667"
+  }
+
+  if len(opts.Nick) == 0 {
+    opts.Nick = "irc2pusher"
+  }
+
+  return opts
+}
+
 func (irc *IrcClient) InitClient() {
-  irc.Server   = "irc.freenode.org"
-  irc.Port     = "6667"
-  irc.Nick     = "irc2pusher"
-  irc.Channels = "#irc2pusher"
+  opts := getIrcOptions()
+
+  if len(opts.Server) == 0 {
+    fmt.Println("IRC server hostname or ip is not set")
+    os.Exit(1)
+  }
+
+  if len(opts.Channels) == 0 {
+    fmt.Println("IRC server channels are not set")
+    os.Exit(1)
+  }
+
+  irc.Opts = opts
 }
 
 func getPusherOptions() *PusherOptions {
