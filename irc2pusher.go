@@ -83,7 +83,7 @@ func (irc *IrcClient) Connect() {
 
   channels := strings.Split(irc.Opts.Channels, " ")
   for _, name := range(channels) {
-    irc.Send("JOIN " + name + "\n")
+    irc.Join(name)
   }
 }
 
@@ -96,6 +96,14 @@ func (irc *IrcClient) Send(str string) {
   if err != nil {
     log.Printf("Error: %v", err)
   }
+}
+
+func (irc *IrcClient) Join(name string) {
+  if !strings.HasPrefix(name, "#") {
+    name = "#" + name
+  }
+
+  irc.Send("JOIN " + name + "\n")
 }
 
 func (irc *IrcClient) respondToPing(str string) {
