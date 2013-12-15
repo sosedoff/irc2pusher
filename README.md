@@ -15,7 +15,8 @@ export PUSHER_SECRET=secret
 Run daemon:
 
 ```
-irc2pusher -h irc.freenode.org -p 6667 -n bot -c #linux
+irc2pusher -s irc.freenode.org -p 6667 -n bot -c #linux
+irc2pusher -s irc.freenode.org -c "#channel1,#channel2"
 ```
 
 Messages will be sent in JSON format:
