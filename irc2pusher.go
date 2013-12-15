@@ -14,19 +14,27 @@ import (
 )
 
 type IrcClient struct {
-  Server   string
-  Port     string
-  Nick     string
-  Channels string
-
-  Socket net.Conn
-  Pusher *pusher.Client
+  Server     string
+  Port       string
+  Nick       string
+  Channels   string
+  Socket     net.Conn
+  Pusher     *pusher.Client
+  PusherOpts *PusherOptions
 }
 
 type IrcMessage struct {
   Nick    string `json:"nick"`
   Channel string `json:"channel"`
   Message string `json:"message"`
+}
+
+type PusherOptions struct {
+  Id      string
+  Key     string
+  Secret  string
+  Channel string
+  Event   string
 }
 
 func parseMessage(line string) *IrcMessage {
@@ -98,7 +106,11 @@ func (irc *IrcClient) sendToPusher(message *IrcMessage) {
     return
   }
 
-  irc.Pusher.Publish(string(data), "message", "irc")
+  irc.Pusher.Publish(
+    string(data),
+    irc.PusherOpts.Event,
+    irc.PusherOpts.Channel,
+  )
 }
 
 func (irc *IrcClient) handleLine(line string) {
@@ -141,27 +153,46 @@ func (irc *IrcClient) InitClient() {
   irc.Channels = "#irc2pusher"
 }
 
-func (irc *IrcClient) InitPusher() {
-  id     := os.Getenv("PUSHER_ID")
-  key    := os.Getenv("PUSHER_KEY")
-  secret := os.Getenv("PUSHER_SECRET")
+func getPusherOptions() *PusherOptions {
+  options := new(PusherOptions)
 
-  if len(id) == 0 {
+  options.Id      = os.Getenv("PUSHER_ID")
+  options.Key     = os.Getenv("PUSHER_KEY")
+  options.Secret  = os.Getenv("PUSHER_SECRET")
+  options.Channel = os.Getenv("PUSHER_CHANNEL")
+  options.Event   = os.Getenv("PUSHER_EVENT")
+
+  if len(options.Channel) == 0 {
+    options.Channel = "irc"
+  }
+
+  if len(options.Event) == 0 {
+    options.Event  = "message"
+  }
+
+  return options
+}
+
+func (irc *IrcClient) InitPusher() {
+  opts := getPusherOptions()
+
+  if len(opts.Id) == 0 {
     fmt.Println("PUSHER_ID env variable is not set")
     os.Exit(1)
   }
 
-  if len(key) == 0 {
+  if len(opts.Key) == 0 {
     fmt.Println("PUSHER_KEY env variable is not set")
     os.Exit(1)
   }
 
-  if len(secret) == 0 {
+  if len(opts.Secret) == 0 {
     fmt.Println("PUSHER_SECRET env variable is not set")
     os.Exit(1)
   }
 
-  irc.Pusher = pusher.NewClient(id, key, secret)
+  irc.Pusher = pusher.NewClient(opts.Id, opts.Key, opts.Secret)
+  irc.PusherOpts = opts
 }
 
 func main() {
