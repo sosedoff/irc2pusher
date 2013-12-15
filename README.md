@@ -6,7 +6,7 @@ Send IRC messages to a Pusher channel
 
 Set pusher application settings:
 
-```
+```bash
 export PUSHER_ID=12345
 export PUSHER_KEY=key
 export PUSHER_SECRET=secret
@@ -14,7 +14,7 @@ export PUSHER_SECRET=secret
 
 Run daemon:
 
-```
+```bash
 irc2pusher -s irc.freenode.org -p 6667 -n bot -c linux
 irc2pusher -s irc.freenode.org -c "channel1,channel2"
 ```
@@ -31,7 +31,7 @@ Messages will be sent in JSON format:
 
 Extra options:
 
-```
+```bash
 # Set a different pusher channel, defaults to "irc"
 export PUSHER_CHANNEL=mychannel
 
