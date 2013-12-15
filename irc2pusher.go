@@ -44,6 +44,11 @@ type PusherOptions struct {
   Event   string
 }
 
+func terminate(message string) {
+  fmt.Println(message)
+  os.Exit(1)
+}
+
 func parseMessage(line string) *IrcMessage {
   parts   := strings.Split(line, "PRIVMSG")
   nick    := strings.Replace(strings.Split(parts[0], "!")[0], ":", "", 1)
@@ -185,13 +190,11 @@ func (irc *IrcClient) InitClient() {
   opts := getIrcOptions()
 
   if len(opts.Server) == 0 {
-    fmt.Println("IRC server hostname or ip is not set")
-    os.Exit(1)
+    terminate("IRC server hostname or ip is not set")
   }
 
   if len(opts.Channels) == 0 {
-    fmt.Println("IRC server channels are not set")
-    os.Exit(1)
+    terminate("IRC server channels are not set")
   }
 
   irc.Opts = opts
@@ -221,18 +224,15 @@ func (irc *IrcClient) InitPusher() {
   opts := getPusherOptions()
 
   if len(opts.Id) == 0 {
-    fmt.Println("PUSHER_ID env variable is not set")
-    os.Exit(1)
+    terminate("PUSHER_ID env variable is not set")
   }
 
   if len(opts.Key) == 0 {
-    fmt.Println("PUSHER_KEY env variable is not set")
-    os.Exit(1)
+    terminate("PUSHER_KEY env variable is not set")
   }
 
   if len(opts.Secret) == 0 {
-    fmt.Println("PUSHER_SECRET env variable is not set")
-    os.Exit(1)
+    terminate("PUSHER_SECRET env variable is not set")
   }
 
   irc.Pusher = pusher.NewClient(opts.Id, opts.Key, opts.Secret)
