@@ -14,6 +14,8 @@ import (
   "github.com/jessevdk/go-flags"
 )
 
+const VERSION = "0.1.0"
+
 type IrcClient struct {
   Socket     net.Conn
   Opts       *IrcOptions
